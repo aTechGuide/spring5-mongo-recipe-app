@@ -1,13 +1,13 @@
 package in.kamranali.domain;
 
+import org.springframework.data.annotation.Id;
+
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 @Data
-@EqualsAndHashCode(exclude = { "recipe" })
 public class Notes {
 
+	@Id
 	private String id;
-	private Recipe recipe;
 	private String recipeNotes;
 }
