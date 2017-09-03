@@ -37,7 +37,7 @@ jobs:
           key: spring5-mongo-recipe-app-{{ checksum "pom.xml" }}
         
       # run tests!
-      - run: mvn package surefire-report:report-only site -DgenerateReports=false cobertura:cobertura
+      - run: mvn install surefire-report:report-only site -DgenerateReports=false cobertura:cobertura
 
       - store_test_results:
           path: target/surefire-reports
