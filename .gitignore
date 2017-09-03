@@ -1,0 +1,60 @@
+/target/
+
+# Eclipse
+*bin*
+.classpath
+.settings/*
+.project
+.checkstyle
+.settings/
+*.launch
+test-output/*
+.fbExcludeFilterFile
+.factorypath
+lbostruststore
+
+# Intellij
+.idea
+.idea/
+*.iml
+target
+*.iws
+
+# Netbeans
+nb-configuration.xml
+
+# Mac
+.DS_Store
+
+# Maven
+log/
+logs/
+work/
+target/
+classes/
+src/main/resources/git.properties
+
+# http://maven.apache.org/surefire/maven-surefire-plugin/test-mojo.html#runOrder
+.surefire-*
+
+# GWT
+*/.gwt
+*/src/main/webapp/WEB-INF/classes/
+
+# Env
+*.log
+.vault_token
+
+# Git
+*.orig
+
+# Jenv
+.java-version
+
+# Jrebel
+rebel*.xml
+
+#Spring
+*.pid
+*.springBeans
+

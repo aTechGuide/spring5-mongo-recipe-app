@@ -1,0 +1,55 @@
+# Java Maven CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  build:
+    working_directory: ~/spring5-mongo-recipe-app
+    docker:
+      # specify the version you desire here
+      - image: circleci/openjdk:8-jdk
+      
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    environment:
+      # Customize the JVM maximum heap limit
+      MAVEN_OPTS: -Xmx3200m
+    
+    steps:
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - spring5-mongo-recipe-app-{{ checksum "pom.xml" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: mvn dependency:go-offline
+
+      - save_cache:
+          paths:
+            - ~/.m2
+          key: spring5-mongo-recipe-app-{{ checksum "pom.xml" }}
+        
+      # run tests!
+      - run: mvn package surefire-report:report-only site -DgenerateReports=false cobertura:cobertura
+
+      - store_test_results:
+          path: target/surefire-reports
+
+      - store_artifacts:
+          path: target/spring5-recipe-app-0.0.1.jar
+
+      - store_artifacts:
+          path: target/site
+      
+      - run: 
+          name: Send to Codecov
+          command: bash <(curl -s https://codecov.io/bash)    
+
+
