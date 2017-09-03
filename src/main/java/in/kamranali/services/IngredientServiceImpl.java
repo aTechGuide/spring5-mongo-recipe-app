@@ -51,6 +51,10 @@ public class IngredientServiceImpl implements IngredientService {
 			log.error("Ingredient ID not found ID:" + ingredientId);
 		}
 		
+		//enhance command object with recipe id
+        IngredientCommand ingredientCommand = ingredientCommandOptional.get();
+        ingredientCommand.setRecipeId(recipeOptional.get().getId());
+		
 		return ingredientCommandOptional.get();
 	}
 
@@ -101,8 +105,11 @@ public class IngredientServiceImpl implements IngredientService {
 						.findFirst();
 			}
 			
-			return ingredientToIngredientCommand.convert(savedIngredientOptional
-					.get());
+			//enhance with id value
+            IngredientCommand ingredientCommandSaved = ingredientToIngredientCommand.convert(savedIngredientOptional.get());
+            ingredientCommandSaved.setRecipeId(recipe.getId());
+			
+			return ingredientCommandSaved;
 		}
 	}
 
@@ -132,7 +139,6 @@ public class IngredientServiceImpl implements IngredientService {
 		}else {
 			log.debug("Recipe Not Present ID: " + recipeId);
 		}
-		
 		
 	}
 }

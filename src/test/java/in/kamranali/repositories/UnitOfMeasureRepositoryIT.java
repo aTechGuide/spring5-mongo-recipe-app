@@ -4,20 +4,41 @@ import static org.junit.Assert.*;
 
 import java.util.Optional;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import in.kamranali.bootstrap.RecipeBootstrap;
 import in.kamranali.domain.UnitOfMeasure;
 
 @RunWith(SpringRunner.class)
-@DataJpaTest // It will bring up embedded DB and Its gonna configure Spring Data JPA
+@DataMongoTest
 public class UnitOfMeasureRepositoryIT {
 
 	@Autowired
 	UnitOfMeasureRepository unitOfMeasureRepository;
+	
+	@Autowired
+    CategoryRepository categoryRepository;
+
+    @Autowired
+    RecipeRepository recipeRepository;
+    
+    @Before
+    public void setUp() throws Exception {
+
+        recipeRepository.deleteAll();
+        unitOfMeasureRepository.deleteAll();
+        categoryRepository.deleteAll();
+
+        RecipeBootstrap recipeBootstrap = new RecipeBootstrap(categoryRepository, recipeRepository, unitOfMeasureRepository);
+
+        recipeBootstrap.onApplicationEvent(null);
+    }
+
 	
 	@Test
 	public void testFindByDescriptionTeaspoon() {

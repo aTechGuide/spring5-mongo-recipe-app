@@ -1,23 +1,20 @@
 package in.kamranali.domain;
 
 import java.math.BigDecimal;
+import java.util.UUID;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(exclude = { "recipe" })
 @NoArgsConstructor
 public class Ingredient {
 
-	@Id
-	private String id;
+	private String id = UUID.randomUUID().toString();
 	private String description;
 	private BigDecimal amount;
 	private Recipe recipe;
