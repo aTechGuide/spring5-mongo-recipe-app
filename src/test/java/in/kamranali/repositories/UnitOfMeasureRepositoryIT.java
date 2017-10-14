@@ -25,7 +25,7 @@ public class UnitOfMeasureRepositoryIT {
     CategoryRepository categoryRepository;
 
     @Autowired
-    RecipeRepository recipeRepository;
+	RecipeRepository recipeRepository;
     
     @Before
     public void setUp() throws Exception {

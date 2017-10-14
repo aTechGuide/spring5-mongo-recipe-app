@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.HashSet;
 
+import in.kamranali.commands.UnitOfMeasureCommand;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,6 +28,8 @@ import in.kamranali.commands.RecipeCommand;
 import in.kamranali.services.IngredientService;
 import in.kamranali.services.RecipeService;
 import in.kamranali.services.UnitOfMeasureService;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public class IngredientControllerTest {
 
@@ -64,7 +67,7 @@ public class IngredientControllerTest {
 	@Test
 	public void testShowIngredient() throws Exception {
 		
-		when(ingredientService.findByRecipeIdAndIngredientId(Mockito.anyString(), Mockito.anyString())).thenReturn(new IngredientCommand());
+		when(ingredientService.findByRecipeIdAndIngredientId(Mockito.anyString(), Mockito.anyString())).thenReturn(Mono.just(new IngredientCommand()));
 		
 		mockMVC.perform(get("/recipe/1/ingredient/2/show"))
 		.andExpect(status().isOk())
@@ -77,7 +80,7 @@ public class IngredientControllerTest {
 	public void testNewIngredientForm() throws Exception {
 		
 		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(new RecipeCommand());
-		when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+		when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 		
 		mockMVC.perform(get("/recipe/1/ingredient/new"))
 		.andExpect(status().isOk())
@@ -90,8 +93,8 @@ public class IngredientControllerTest {
 	@Test
 	public void testUpdateIngredientForm() throws Exception {
 		
-		when(ingredientService.findByRecipeIdAndIngredientId(Mockito.anyString(), Mockito.anyString())).thenReturn(new IngredientCommand());
-		when(unitOfMeasureService.listAllUoms()).thenReturn(new HashSet<>());
+		when(ingredientService.findByRecipeIdAndIngredientId(Mockito.anyString(), Mockito.anyString())).thenReturn(Mono.just(new IngredientCommand()));
+		when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 		
 		mockMVC.perform(get("/recipe/1/ingredient/2/update"))
 		.andExpect(status().isOk())
@@ -108,7 +111,7 @@ public class IngredientControllerTest {
 		command.setId("3");
 		command.setRecipeId("2");
 		
-		when(ingredientService.saveIngredientCommand(Mockito.any())).thenReturn(command );
+		when(ingredientService.saveIngredientCommand(Mockito.any())).thenReturn(Mono.just(command) );
 		
 		mockMVC.perform(post("/recipe/2/ingredient")
 				.contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -121,7 +124,9 @@ public class IngredientControllerTest {
 	
 	@Test
 	public void testDeleteIngredient() throws Exception {
-		
+
+		when(ingredientService.deleteById(Mockito.anyString(), Mockito.anyString())).thenReturn(Mono.empty());
+
 		mockMVC.perform(get("/recipe/1/ingredient/2/delete"))
 		.andExpect(status().is3xxRedirection())
 		.andExpect(view().name("redirect:/recipe/1/ingredients"));

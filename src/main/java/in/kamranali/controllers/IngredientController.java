@@ -43,7 +43,7 @@ public class IngredientController {
 		
 		log.debug("Showing ingredients for recipe id:" + recipeId);
 		
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
+		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
 		return "recipe/ingredient/show";
 	}
 	
@@ -60,7 +60,7 @@ public class IngredientController {
 		ingredientCommand.setUom(new UnitOfMeasureCommand());
 		
 		model.addAttribute("ingredient", ingredientCommand);
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
 
 		return "recipe/ingredient/ingredientform";
 	}
@@ -70,15 +70,15 @@ public class IngredientController {
 		
 		log.debug("Showing ingredients for recipe id:" + recipeId);
 		
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
+		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
 		return "recipe/ingredient/ingredientform";
 	}
 	
 	@PostMapping("/recipe/{recipeId}/ingredient")
 	public String saveOrUpdate(@ModelAttribute IngredientCommand command){
 		
-		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
+		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command).block();
 		log.debug("Saved recipe id:" + command.getRecipeId());
 		log.debug("Saved ingredient id:" + command.getId());
 		
@@ -89,7 +89,7 @@ public class IngredientController {
 	public String deleteRecipeIngredient(@PathVariable String recipeId, @PathVariable String id){
 		
 		log.debug("Delete ingredients for recipe id:" + recipeId);
-		ingredientService.deleteById(recipeId, id);
+		ingredientService.deleteById(recipeId, id).block() ;
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}
 }
