@@ -53,10 +53,6 @@ public class IngredientServiceImplTest {
     }
 
     @Test
-    public void findByRecipeIdAndId() throws Exception {
-    }
-
-    @Test
     public void findByRecipeIdAndReceipeIdHappyPath() throws Exception {
         //given
         Recipe recipe = new Recipe();
@@ -120,6 +116,7 @@ public class IngredientServiceImplTest {
         ingredient.setRecipe(recipe);
 
         when(recipeRepository.findById(anyString())).thenReturn(Mono.just(recipe));
+        when(recipeRepository.save(Mockito.any())).thenReturn(Mono.just(recipe));
 
         //when
         ingredientService.deleteById("1", "3");

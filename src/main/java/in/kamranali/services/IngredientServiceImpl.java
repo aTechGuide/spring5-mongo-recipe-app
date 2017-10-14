@@ -51,42 +51,19 @@ public class IngredientServiceImpl implements IngredientService {
 					command.setRecipeId(recipeId);
 					return command;
 				});
-		
-//		Optional<Recipe> recipeOptional = recipeReactiveRepository.findById(recipeId);
-//
-//		if(! recipeOptional.isPresent()){
-//			log.error("Recipe ID not found ID:" + recipeId);
-//		}
-//
-//		Optional<IngredientCommand> ingredientCommandOptional = recipeOptional.get().getIngredients().stream()
-//		.filter(ingredien -> ingredien.getId().equals(ingredientId))
-//		.map(ingredient -> ingredientToIngredientCommand.convert(ingredient))
-//		.findFirst();
-//
-//		if(!ingredientCommandOptional.isPresent()){
-//			log.error("Ingredient ID not found ID:" + ingredientId);
-//		}
-//
-//		//enhance command object with recipe id
-//        IngredientCommand ingredientCommand = ingredientCommandOptional.get();
-//        ingredientCommand.setRecipeId(recipeOptional.get().getId());
-//
-//		return Mono.just(ingredientCommandOptional.get());
 	}
 
 	@Transactional
 	@Override
 	public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand ingredientCommand) {
 		
-		Optional<Recipe> recipeOptional = Optional.of(recipeReactiveRepository.findById(ingredientCommand.getRecipeId()).block());
+		Recipe recipe = recipeReactiveRepository.findById(ingredientCommand.getRecipeId()).block();
 		
-		if(! recipeOptional.isPresent()){
+		if( recipe == null){
 			log.error("Recipe ID not found ID:" + ingredientCommand.getRecipeId());
 			
 			return Mono.just(new IngredientCommand());
 		}else {
-			
-			Recipe recipe = recipeOptional.get();
 			
 			Optional<Ingredient> ingredientOptional = recipe.getIngredients().stream()
 			.filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
@@ -97,7 +74,7 @@ public class IngredientServiceImpl implements IngredientService {
 				ingredientFound.setDescription(ingredientCommand.getDescription());
 				ingredientFound.setAmount(ingredientCommand.getAmount());
 				ingredientFound.setUom(unitOfMeasureReactiveRepository.findById(ingredientCommand.getUom().getId()).block());
-						//.orElseThrow(() -> new RuntimeException("UOM NOT Found")));
+
 			} else {
 				// add new Ingredient
 				Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
@@ -152,7 +129,7 @@ public class IngredientServiceImpl implements IngredientService {
 				ingredientToDelete.setRecipe(null); // Nulling the relationship so that Hibernate can delte it from DB.
 				
 				recipe.getIngredients().remove(ingredientToDelete);
-				recipeReactiveRepository.save(recipe);
+				recipeReactiveRepository.save(recipe).block();
 			}
 		}else {
 			log.debug("Recipe Not Present ID: " + recipeId);
