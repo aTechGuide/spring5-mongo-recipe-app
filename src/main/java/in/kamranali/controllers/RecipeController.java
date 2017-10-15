@@ -13,6 +13,7 @@ import in.kamranali.commands.RecipeCommand;
 import in.kamranali.exceptions.NotFoundException;
 import in.kamranali.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
+import org.thymeleaf.exceptions.TemplateInputException;
 
 @Slf4j
 @Controller
@@ -61,7 +62,7 @@ public class RecipeController {
 		BindingResult bindingResult = webDataBinder.getBindingResult();
 
 		if(bindingResult.hasErrors()){
-			
+
 			bindingResult.getAllErrors().forEach(error -> log.debug(error.toString()));
 			return RECIPE_RECIPRFORM_URL;
 		}
@@ -78,17 +79,15 @@ public class RecipeController {
 		return "redirect:/";
 	}
 	
-//	@ResponseStatus(HttpStatus.NOT_FOUND)
-//	@ExceptionHandler(NotFoundException.class)
-//	public ModelAndView handleNotFound(Exception exception){
-//
-//		log.error("Handling Not found Exception: ");
-//		log.error(exception.getMessage());
-//
-//		ModelAndView modelAndView = new ModelAndView();
-//		modelAndView.setViewName("404error");
-//		modelAndView.addObject("exception", exception);
-//
-//		return modelAndView;
-//	}
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@ExceptionHandler({NotFoundException.class, TemplateInputException.class})
+	public String handleNotFound(Exception exception, Model model){
+
+		log.error("Handling Not found Exception: ");
+		log.error(exception.getMessage());
+
+		model.addAttribute("exception", exception);
+
+		return "404error";
+	}
 }
