@@ -12,6 +12,7 @@ import in.kamranali.services.IngredientService;
 import in.kamranali.services.RecipeService;
 import in.kamranali.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Controller
@@ -67,7 +68,6 @@ public class IngredientController {
 		ingredientCommand.setUom(new UnitOfMeasureCommand());
 		
 		model.addAttribute("ingredient", ingredientCommand);
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
 
 		return "recipe/ingredient/ingredientform";
 	}
@@ -78,7 +78,6 @@ public class IngredientController {
 		log.debug("Showing ingredients for recipe id:" + recipeId);
 		
 		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList());
 		return "recipe/ingredient/ingredientform";
 	}
 	
@@ -91,8 +90,6 @@ public class IngredientController {
         if(bindingResult.hasErrors()){
 
             bindingResult.getAllErrors().forEach(error -> log.debug(error.toString()));
-
-            model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
             return "recipe/ingredient/ingredientform";
         }
 		
@@ -110,4 +107,9 @@ public class IngredientController {
 		ingredientService.deleteById(recipeId, id).block() ;
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}
+
+	@ModelAttribute("uomList")
+    public Flux<UnitOfMeasureCommand> populateUOMList(){
+	    return unitOfMeasureService.listAllUoms();
+    }
 }
