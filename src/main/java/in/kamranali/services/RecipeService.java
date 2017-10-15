@@ -1,17 +1,17 @@
 package in.kamranali.services;
 
-import java.util.Set;
-
 import in.kamranali.commands.RecipeCommand;
 import in.kamranali.domain.Recipe;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface RecipeService {
 
-	Set<Recipe> getRecipes();
-	Recipe findById(String l);
+	Flux<Recipe> getRecipes();
+	Mono<Recipe> findById(String l);
 	
-	RecipeCommand saveRecipeCommand(RecipeCommand command);
-	RecipeCommand findCommandById(String anyLong);
+	Mono<RecipeCommand> saveRecipeCommand(RecipeCommand command);
+	Mono<RecipeCommand> findCommandById(String anyLong);
 
 	void deleteByid(String id);
 }

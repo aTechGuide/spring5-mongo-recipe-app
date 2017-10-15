@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,6 +26,7 @@ import org.springframework.ui.Model;
 
 import in.kamranali.domain.Recipe;
 import in.kamranali.services.RecipeService;
+import reactor.core.publisher.Flux;
 
 public class IndexControllerTest {
 
@@ -45,7 +47,9 @@ public class IndexControllerTest {
 	// We are using a mocked servlet context (Mocked Dispatcher servlet) to test MVC controllers
 	public void testMockMVC() throws Exception {
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
-		
+
+		when(recipeService.getRecipes()).thenReturn(Flux.empty());
+
 		mockMvc.perform(get("/"))
 		.andExpect(status().isOk())
 		.andExpect(view().name("index"));
@@ -54,9 +58,13 @@ public class IndexControllerTest {
 	@Test
 	public void testGetIndexPage() {
 
-		ArgumentCaptor<Set<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Set.class);
+		ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
+
+		Recipe recipe = new Recipe();
+
+		Set<Recipe> recipes = Stream.of(new Recipe()).collect(Collectors.toCollection(HashSet::new));
 		
-		when(recipeService.getRecipes()).thenReturn(Stream.of(new Recipe()).collect(Collectors.toCollection(HashSet::new)));
+		when(recipeService.getRecipes()).thenReturn(Flux.fromIterable(recipes));
 		
 		assertEquals("index", indexController.getIndexPage(model));
 		verify(model, times(1)).addAttribute(Mockito.eq("recipes"), argumentCaptor.capture());

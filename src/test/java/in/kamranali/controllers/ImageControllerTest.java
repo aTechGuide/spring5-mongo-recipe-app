@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import in.kamranali.commands.RecipeCommand;
 import in.kamranali.services.ImageService;
 import in.kamranali.services.RecipeService;
+import reactor.core.publisher.Mono;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
@@ -48,7 +49,7 @@ public class ImageControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("1");
 
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         //when
         mockMvc.perform(get("/recipe/1/image"))
@@ -87,7 +88,7 @@ public class ImageControllerTest {
 		}
 		command.setImage(imageBytes);
 		
-		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(command);
+		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(Mono.just(command));
 		
 		MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))
 		.andExpect(status().isOk())

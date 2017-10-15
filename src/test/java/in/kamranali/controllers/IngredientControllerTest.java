@@ -55,7 +55,7 @@ public class IngredientControllerTest {
 	@Test
 	public void testListIngredients() throws Exception {
 		
-		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(new RecipeCommand());
+		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(Mono.just(new RecipeCommand()));
 		
 		mockMVC.perform(get("/recipe/1/ingredients"))
 		.andExpect(status().isOk())
@@ -79,7 +79,7 @@ public class IngredientControllerTest {
 	@Test
 	public void testNewIngredientForm() throws Exception {
 		
-		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(new RecipeCommand());
+		when(recipeService.findCommandById(Mockito.anyString())).thenReturn(Mono.just(new RecipeCommand()));
 		when(unitOfMeasureService.listAllUoms()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
 		
 		mockMVC.perform(get("/recipe/1/ingredient/new"))

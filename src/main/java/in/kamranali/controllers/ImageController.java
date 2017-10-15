@@ -54,7 +54,7 @@ public class ImageController {
 		
 		log.debug("Getting image from DB for recipe id:" + recipeId);
 		
-		RecipeCommand command = recipeService.findCommandById(recipeId);
+		RecipeCommand command = recipeService.findCommandById(recipeId).block();
 		
 		if(command.getImage() != null){
 			byte[] byteArray = new byte[command.getImage().length];

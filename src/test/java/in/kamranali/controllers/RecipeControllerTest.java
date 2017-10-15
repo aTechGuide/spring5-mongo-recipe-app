@@ -22,6 +22,7 @@ import in.kamranali.commands.RecipeCommand;
 import in.kamranali.domain.Recipe;
 import in.kamranali.exceptions.NotFoundException;
 import in.kamranali.services.RecipeService;
+import reactor.core.publisher.Mono;
 
 /**
  * Created by jt on 6/19/17.
@@ -52,7 +53,7 @@ public class RecipeControllerTest {
         Recipe recipe = new Recipe();
         recipe.setId("1");
 
-        when(recipeService.findById(Mockito.anyString())).thenReturn(recipe);
+        when(recipeService.findById(Mockito.anyString())).thenReturn(Mono.just(recipe));
 
         mockMvc.perform(get("/recipe/1/show"))
                 .andExpect(status().isOk())
@@ -73,7 +74,7 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
-        when(recipeService.saveRecipeCommand(Mockito.any())).thenReturn(command);
+        when(recipeService.saveRecipeCommand(Mockito.any())).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)   
@@ -90,7 +91,7 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
-        when(recipeService.findCommandById(Mockito.anyString())).thenReturn(command);
+        when(recipeService.findCommandById(Mockito.anyString())).thenReturn(Mono.just(command));
 
         mockMvc.perform(get("/recipe/1/update"))
                 .andExpect(status().isOk())
@@ -123,7 +124,7 @@ public class RecipeControllerTest {
         RecipeCommand command = new RecipeCommand();
         command.setId("2");
 
-        when(recipeService.saveRecipeCommand(Mockito.any())).thenReturn(command);
+        when(recipeService.saveRecipeCommand(Mockito.any())).thenReturn(Mono.just(command));
 
         mockMvc.perform(post("/recipe")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)   
