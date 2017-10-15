@@ -36,7 +36,7 @@ public class ImageController {
 		
 		log.debug("Getting image for recipe id:" + recipeId);
 		
-		model.addAttribute("recipe", recipeService.findCommandById(recipeId));
+		model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
 		return "recipe/imageuploadform";
 	}
 	
@@ -45,7 +45,7 @@ public class ImageController {
 		
 		log.debug("Saving image for recipe id:" + recipeId);
 		
-		imageService.saveImageFile(recipeId, file);
+		imageService.saveImageFile(recipeId, file).block();
 		return "redirect:/recipe/" + recipeId + "/show";
 	}
 	

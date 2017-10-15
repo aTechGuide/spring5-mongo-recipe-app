@@ -1,9 +1,10 @@
 package in.kamranali.services;
 
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Mono;
 
 public interface ImageService {
 
-	void saveImageFile(String recipeID, MultipartFile file);
+	Mono<Void> saveImageFile(String recipeID, MultipartFile file);
 
 }
