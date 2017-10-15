@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -28,6 +29,7 @@ import in.kamranali.domain.Recipe;
 import in.kamranali.services.RecipeService;
 import reactor.core.publisher.Flux;
 
+@Ignore
 public class IndexControllerTest {
 
 	@Mock

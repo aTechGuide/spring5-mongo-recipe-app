@@ -21,7 +21,7 @@ public class IndexController {
 	public String getIndexPage(Model model){
 		
 		log.debug("I'm in Index Page");
-		model.addAttribute("recipes", recipeService.getRecipes().collectList().block());
+		model.addAttribute("recipes", recipeService.getRecipes().collectList());
 		return "index";
 	}
 }

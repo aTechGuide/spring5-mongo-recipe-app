@@ -2,10 +2,6 @@ package in.kamranali.controllers;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,22 +45,22 @@ public class ImageController {
 		return "redirect:/recipe/" + recipeId + "/show";
 	}
 	
-	@GetMapping("recipe/{recipeId}/recipeimage")
-	public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException{
-		
-		log.debug("Getting image from DB for recipe id:" + recipeId);
-		
-		RecipeCommand command = recipeService.findCommandById(recipeId).block();
-		
-		if(command.getImage() != null){
-			byte[] byteArray = new byte[command.getImage().length];
-			
-			int i = 0;
-			for (byte b : command.getImage()) {
-				byteArray[i++] = b;
-			}
-			response.setContentType("image/jpeg");
-			IOUtils.copy(new ByteArrayInputStream(byteArray), response.getOutputStream());
-		}
-	}
+//	@GetMapping("recipe/{recipeId}/recipeimage")
+//	public void renderImageFromDB(@PathVariable String recipeId, HttpServletResponse response) throws IOException{
+//
+//		log.debug("Getting image from DB for recipe id:" + recipeId);
+//
+//		RecipeCommand command = recipeService.findCommandById(recipeId).block();
+//
+//		if(command.getImage() != null){
+//			byte[] byteArray = new byte[command.getImage().length];
+//
+//			int i = 0;
+//			for (byte b : command.getImage()) {
+//				byteArray[i++] = b;
+//			}
+//			response.setContentType("image/jpeg");
+//			IOUtils.copy(new ByteArrayInputStream(byteArray), response.getOutputStream());
+//		}
+//	}
 }

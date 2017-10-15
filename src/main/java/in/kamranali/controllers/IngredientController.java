@@ -43,7 +43,7 @@ public class IngredientController {
 		
 		log.debug("Showing ingredients for recipe id:" + recipeId);
 		
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
+		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id));
 		return "recipe/ingredient/show";
 	}
 	
@@ -60,7 +60,7 @@ public class IngredientController {
 		ingredientCommand.setUom(new UnitOfMeasureCommand());
 		
 		model.addAttribute("ingredient", ingredientCommand);
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms());
 
 		return "recipe/ingredient/ingredientform";
 	}
@@ -71,7 +71,7 @@ public class IngredientController {
 		log.debug("Showing ingredients for recipe id:" + recipeId);
 		
 		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, id).block());
-		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList().block());
+		model.addAttribute("uomList", unitOfMeasureService.listAllUoms().collectList());
 		return "recipe/ingredient/ingredientform";
 	}
 	
